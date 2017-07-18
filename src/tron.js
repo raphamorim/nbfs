@@ -25,7 +25,7 @@ function Tron(encoding) {
       const stream = fs.createWriteStream(filepath)
       stream.write(data, function() {
         stream.close()
-        resolve()
+        resolve(data)
       })
     })
   }
@@ -57,6 +57,11 @@ function Tron(encoding) {
       stream.on('end', function() {
         stream.close()
         resolve(file)
+      })
+
+      stream.on('error', function(err) {
+        stream.close()
+        reject(err)
       })
     })
   }

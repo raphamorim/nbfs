@@ -14,45 +14,43 @@ Tron creates and manage multiples processes which communicate between themself. 
 
 Even if you use FS native stream API or based on async ways to this job, will always run on the nodejs main thread (in idle status or not).
 
-# API
+# Streams
+
+## Read
 
 ```js
 const tron = require('tron')
+const stream = tron.read('./my-file.js')
 
-tron.readFile('./my-file.js')
-
-tron.on('read', (chunk) => {
-  console.log(chunk)
+stream.on('read', (content) => {
+  console.log(content) // 'abc'
 })
 
-tron.on('end', (results) => {
-  console.log(results) // [{path: './my-file.js', content: 'abc', operation: 'read'},]
+stream.on('end', (result) => {
+  console.log(result) // {path: './my-file.js', content: 'abc', operation: 'read'}
+})
+
+stream.on('error', (error) => {
+  console.log(error)
 })
 ```
 
+## Write
+
 ```js
 const tron = require('tron')
+const stream = tron.write('./my-file.js')
 
-tron.readFile('./my-file.js')
-tron.writeFile('./my-file.js', 'my-awesome-content!')
-tron.readFile('./my-file.js')
-
-tron.on('read', (chunk) => {
-  console.log(chunk)
+stream.on('write', (content) => {
+  console.log(content) // 'abc'
 })
 
-tron.on('write', (file) => {
-  console.log(file)
+stream.on('end', (result) => {
+  console.log(result) // {path: './my-file.js', content: 'abc', operation: 'write'}
 })
 
-tron.on('end', (results) => {
-  console.log(results)
-  /*
-    [
-      {path: './my-file.js', content: 'abc', operation: 'read'},
-      {path: './my-file.js', content: 'my-awesome-content!', operation: 'write'},
-      {path: './my-file.js', content: 'my-awesome-content!', operation: 'read'},
-    ]
-  /*
+stream.on('error', (error) => {
+  console.log(error)
 })
+```
 ```
