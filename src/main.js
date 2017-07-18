@@ -17,7 +17,6 @@ Main.prototype.read = function(filePath) {
 
   child.on('message', (data) => {
     if (data.error) {
-      console.log(11)
       self.emit('error', data.error)
       self.emit('end', {
         error: data.error
@@ -47,6 +46,13 @@ Main.prototype.write = function(path, writeData) {
   })
 
   child.on('message', (data) => {
+    if (data.error) {
+      self.emit('error', data.error)
+      self.emit('end', {
+        error: data.error
+      })
+    }
+
     self.emit('write', data.data)
     child.kill()
     self.emit('end', {

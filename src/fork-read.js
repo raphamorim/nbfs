@@ -10,7 +10,7 @@ process.on("message", function(o) {
       })
   }).catch((err) => {
     process.send({
-      error: error
+      error: err
     })
   })
 })

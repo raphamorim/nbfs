@@ -16,11 +16,11 @@ Even if you use FS native stream API or based on async ways to this job, will al
 
 # Streams
 
-## Read
+## read
 
 ```js
 const tron = require('tron')
-const stream = tron.read('./my-file.js')
+const stream = tron.read('./my-file.js') // absolute path
 
 stream.on('read', (content) => {
   console.log(content) // 'abc'
@@ -35,11 +35,11 @@ stream.on('error', (error) => {
 })
 ```
 
-## Write
+## write
 
 ```js
 const tron = require('tron')
-const stream = tron.write('./my-file.js')
+const stream = tron.write('./my-file.js') // absolute path
 
 stream.on('write', (content) => {
   console.log(content) // 'abc'
@@ -53,4 +53,9 @@ stream.on('error', (error) => {
   console.log(error)
 })
 ```
-```
+
+## list
+
+## isDirectory
+
+## folderPath
