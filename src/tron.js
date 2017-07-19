@@ -27,6 +27,11 @@ function Tron(encoding) {
         stream.close()
         resolve(data)
       })
+
+      stream.on('error', function(err) {
+        stream.close()
+        reject(err)
+      })
     })
   }
 

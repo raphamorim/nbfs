@@ -7,10 +7,8 @@ var Main = function(opts) {}
 Main.prototype = new events.EventEmitter
 
 Main.prototype.read = function(filePath) {
-  var self = this
-  var child
-
-  child = fork(path.resolve(__dirname, 'fork-read.js'))
+  const self = this
+  let child = fork(path.resolve(__dirname, 'fork-read.js'))
   child.send({
     msg: filePath
   })
@@ -21,6 +19,7 @@ Main.prototype.read = function(filePath) {
       self.emit('end', {
         error: data.error
       })
+      return child.kill()
     }
 
     self.emit('read', data.data)
@@ -35,13 +34,11 @@ Main.prototype.read = function(filePath) {
   return this
 }
 
-Main.prototype.write = function(path, writeData) {
-  var self = this
-  var child
-
-  child = fork(path.resolve(__dirname, '/fork-write'))
+Main.prototype.write = function(filePath, writeData) {
+  const self = this
+  let child = fork(path.resolve(__dirname, 'fork-write.js'))
   child.send({
-    path: path,
+    path: filePath,
     msg: writeData,
   })
 
@@ -51,6 +48,7 @@ Main.prototype.write = function(path, writeData) {
       self.emit('end', {
         error: data.error
       })
+      return child.kill()
     }
 
     self.emit('write', data.data)
