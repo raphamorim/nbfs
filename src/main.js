@@ -2,12 +2,9 @@ const events = require('events')
 const path = require('path')
 const fork = require('child_process').fork
 
-var Main = function(opts) {}
+exports.read = function _read(filePath) {
+  const emmiter = new events.EventEmitter
 
-Main.prototype = new events.EventEmitter
-
-Main.prototype.read = function(filePath) {
-  const self = this
   let child = fork(path.resolve(__dirname, 'fork-read.js'))
   child.send({
     msg: filePath,
@@ -15,28 +12,29 @@ Main.prototype.read = function(filePath) {
 
   child.on('message', (data) => {
     if (data.error) {
-      self.emit('error', data.error)
-      self.emit('end', {
+      emmiter.emit('error', data.error)
+      emmiter.emit('end', {
         error: data.error,
       })
       child.kill()
-      return this
+      return emmiter
     }
 
-    self.emit('read', data.data)
+    emmiter.emit('read', data.data)
     child.kill()
-    self.emit('end', {
+    emmiter.emit('end', {
       path: data.path,
       content: data.data,
       operation: 'read',
     })
   })
 
-  return this
+  return emmiter
 }
 
-Main.prototype.write = function(filePath, writeData) {
-  const self = this
+exports.write = function _write(filePath, writeData) {
+  const emmiter = new events.EventEmitter
+
   let child = fork(path.resolve(__dirname, 'fork-write.js'))
   child.send({
     path: filePath,
@@ -45,24 +43,22 @@ Main.prototype.write = function(filePath, writeData) {
 
   child.on('message', (data) => {
     if (data.error) {
-      self.emit('error', data.error)
-      self.emit('end', {
+      emmiter.emit('error', data.error)
+      emmiter.emit('end', {
         error: data.error,
       })
       child.kill()
-      return this
+      return emmiter
     }
 
-    self.emit('write', data.data)
+    emmiter.emit('write', data.data)
     child.kill()
-    self.emit('end', {
+    emmiter.emit('end', {
       path: data.path,
       content: data.data,
       operation: 'write',
     })
   })
 
-  return this
+  return emmiter
 }
-
-module.exports = new Main()

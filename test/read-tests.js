@@ -1,6 +1,7 @@
 const assert = require('assert'),
-  path = require('path'),
-  main = require('../index.js')
+  path = require('path')
+
+const { read } = require('../index.js')
 
 describe('Read', function() {
   this.timeout(30000)
@@ -8,7 +9,7 @@ describe('Read', function() {
   context('unit', function() {
     it('should read when file exists', function(done) {
       const filePath = path.resolve(process.cwd(), 'test/fixtures/simple-text')
-      const stream = main.read(filePath)
+      const stream = read(filePath)
 
       stream.on('read', (data) => {
         assert.deepEqual('ABCDEFGH', data)
@@ -28,18 +29,18 @@ describe('Read', function() {
     })
 
     it('should not read when file not exists', function(done) {
-      const stream = main.read('shit-happens')
-
-      stream.on('read', (data) => {
-        assert.deepEqual(data, undefined)
-      })
+      const stream = read('shit-happens')
 
       stream.on('error', (error) => {
         assert.equal(typeof error, 'object')
+        assert.deepEqual(error.code, 'ENOENT')
+        assert.deepEqual(error.syscall, 'open')
       })
 
       stream.on('end', (result) => {
         assert.deepEqual(typeof result.error, 'object')
+        assert.deepEqual(result.error.code, 'ENOENT')
+        assert.deepEqual(result.error.syscall, 'open')
         done()
       })
     })
