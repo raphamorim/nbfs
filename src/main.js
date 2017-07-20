@@ -10,16 +10,17 @@ Main.prototype.read = function(filePath) {
   const self = this
   let child = fork(path.resolve(__dirname, 'fork-read.js'))
   child.send({
-    msg: filePath
+    msg: filePath,
   })
 
   child.on('message', (data) => {
     if (data.error) {
       self.emit('error', data.error)
       self.emit('end', {
-        error: data.error
+        error: data.error,
       })
-      return child.kill()
+      child.kill()
+      return this
     }
 
     self.emit('read', data.data)
@@ -27,7 +28,7 @@ Main.prototype.read = function(filePath) {
     self.emit('end', {
       path: data.path,
       content: data.data,
-      operation: 'read'
+      operation: 'read',
     })
   })
 
@@ -46,9 +47,10 @@ Main.prototype.write = function(filePath, writeData) {
     if (data.error) {
       self.emit('error', data.error)
       self.emit('end', {
-        error: data.error
+        error: data.error,
       })
-      return child.kill()
+      child.kill()
+      return this
     }
 
     self.emit('write', data.data)
@@ -56,7 +58,7 @@ Main.prototype.write = function(filePath, writeData) {
     self.emit('end', {
       path: data.path,
       content: data.data,
-      operation: 'write'
+      operation: 'write',
     })
   })
 
