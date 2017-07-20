@@ -2,6 +2,12 @@
 
 <p align="center">Extensible NonBlocking Nodejs File System</p>
 
+<p align="center">
+  <img src="https://api.travis-ci.org/raphamorim/tron.svg?branch=master"/>
+  <img src="https://ci.appveyor.com/api/projects/status/ti7t3o426e1wgu4r?svg=true"/>
+  <img src="https://api.travis-ci.org/raphamorim/tron.svg?branch=master"/>
+</p>
+
 # Why?
 
 When running an application in NodeJS, it’s single threaded, and will only utilise a single core.
