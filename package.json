@@ -4,7 +4,7 @@
   "description": "Smart Nodejs FileSystem",
   "main": "index.js",
   "scripts": {
-    "test": "$(npm bin)/mocha --require assert --recursive --growl"
+    "test": "mocha --require assert --recursive --growl"
   },
   "repository": {
     "type": "git",
