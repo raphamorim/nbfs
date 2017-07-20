@@ -5,7 +5,7 @@
 <p align="center">
   <img src="https://api.travis-ci.org/raphamorim/tron.svg?branch=master"/>
   <img src="https://ci.appveyor.com/api/projects/status/ti7t3o426e1wgu4r?svg=true"/>
-  <img src="https://api.travis-ci.org/raphamorim/tron.svg?branch=master"/>
+  <img src="https://img.shields.io/npm/v/npm.svg"/>
 </p>
 
 # Why?
