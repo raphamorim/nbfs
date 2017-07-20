@@ -45,14 +45,14 @@ stream.on('error', (error) => {
 
 ```js
 const { write } = require('tron')
-const stream = write('./my-file.js') // absolute path
+const stream = write('./my-file.js', 'hello-world') // absolute path
 
 stream.on('write', (content) => {
-  console.log(content) // 'abc'
+  console.log(content) // 'hello-world'
 })
 
 stream.on('end', (result) => {
-  console.log(result) // {path: './my-file.js', content: 'abc', operation: 'write'}
+  console.log(result) // {path: './my-file.js', content: 'hello-world', operation: 'write'}
 })
 
 stream.on('error', (error) => {
