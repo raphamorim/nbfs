@@ -1,9 +1,9 @@
-<h1 align="center">Tron</h1>
+<h1 align="center">OFS</h1>
 
-<p align="center">Extensible NonBlocking Nodejs File System</p>
+<p align="center">Optimized ~Nodejs~ File System</p>
 
 <p align="center">
-  <img src="https://api.travis-ci.org/raphamorim/tron.svg?branch=master"/>
+  <img src="https://api.travis-ci.org/raphamorim/ofs.svg?branch=master"/>
   <img src="https://ci.appveyor.com/api/projects/status/ti7t3o426e1wgu4r?svg=true"/>
   <img src="https://img.shields.io/npm/v/npm.svg"/>
 </p>
@@ -24,7 +24,7 @@ If your NodeJS Application has 100% cpu-usage and is taking a long time to compl
 
 <p align="center"><br><img alt="Distributed" src="assets/distributed.png"/><br></p>
 
-Tron creates and manage multiples processes which communicate between themself. This approach helps a lot for a non-blocking nodejs architechure.
+ofs creates and manage multiples processes which communicate between themself. This approach helps a lot for a non-blocking nodejs architechure.
 
 Even if you use FS native stream API or based on async ways to this job, will always run on the nodejs main thread (in idle status or not).
 
@@ -32,10 +32,10 @@ Even if you use FS native stream API or based on async ways to this job, will al
 
 # Install
 
-For install Tron, just run in your terminal:
+For install ofs, just run in your terminal:
 
 ```bash
-npm i tron -S
+npm i ofs -S
 ```
 
 # Streams
@@ -43,7 +43,7 @@ npm i tron -S
 ## read
 
 ```js
-const { read } = require('tron')
+const { read } = require('ofs')
 const stream = read('./my-file.js') // absolute path
 
 stream.on('read', (content) => {
@@ -62,7 +62,7 @@ stream.on('error', (error) => {
 ## write
 
 ```js
-const { write } = require('tron')
+const { write } = require('ofs')
 const stream = write('./my-file.js', 'hello-world') // absolute path
 
 stream.on('write', (content) => {
