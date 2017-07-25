@@ -18,11 +18,11 @@ If your NodeJS Application has 100% cpu-usage and is taking a long time to compl
 
 ### Traditional (Many tasks to a single node process)
 
-<p align="center"><img alt="Traditional" src="assets/traditional.png"/></p>
+<p align="center"><br><img alt="Traditional" src="assets/traditional.png"/><br></p>
 
 ### Distributed (Many tasks to distributed to multiple worker processes)
 
-<p align="center"><img alt="Distributed" src="assets/distributed.png"/></p>
+<p align="center"><br><img alt="Distributed" src="assets/distributed.png"/><br></p>
 
 Tron creates and manage multiples processes which communicate between themself. This approach helps a lot for a non-blocking nodejs architechure.
 
