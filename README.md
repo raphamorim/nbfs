@@ -4,7 +4,7 @@
 
 <p align="center">
   <img src="https://api.travis-ci.org/raphamorim/ofs.svg?branch=master"/>
-  <img src="https://ci.appveyor.com/api/projects/status/ti7t3o426e1wgu4r?svg=true"/>
+  <img src="https://ci.appveyor.com/api/projects/status/aaxmlgja7ytam84x/branch/master?svg=true"/>
   <img src="https://img.shields.io/npm/v/npm.svg"/>
 </p>
 
