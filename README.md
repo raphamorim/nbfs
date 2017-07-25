@@ -16,9 +16,27 @@ When performing cpu-intensive or a great number of tasks, you may see this impac
 
 If your NodeJS Application has 100% cpu-usage and is taking a long time to complete or slow to respond, this can be improved by dividing the work to be done, and spreading it over multiple processes.
 
+### Traditional (Many tasks to a single node process)
+
+<p align="center"><img alt="Traditional" src="assets/traditional.png"/></p>
+
+### Distributed (Many tasks to distributed to multiple worker processes)
+
+<p align="center"><img alt="Distributed" src="assets/distributed.png"/></p>
+
 Tron creates and manage multiples processes which communicate between themself. This approach helps a lot for a non-blocking nodejs architechure.
 
 Even if you use FS native stream API or based on async ways to this job, will always run on the nodejs main thread (in idle status or not).
+
+[Read more about it](https://medium.com/@NorbertdeLangen/communicating-between-nodejs-processes-4e68be42b917)
+
+# Install
+
+For install Tron, just run in your terminal:
+
+```bash
+npm i tron -S
+```
 
 # Streams
 
