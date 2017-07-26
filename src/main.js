@@ -2,31 +2,32 @@ const events = require('events')
 const path = require('path')
 const fork = require('child_process').fork
 
+let childRead = fork('./src/fork-read.js')
+  // childWrite = fork(path.resolve(__dirname, 'fork-write.js'))
+
 exports.read = function _read(filePath) {
+  let file = ''
   const emmiter = new events.EventEmitter
 
-  let child = fork(path.resolve(__dirname, 'fork-read.js'))
-  child.send({
+  childRead.send({
     msg: filePath,
   })
 
-  child.on('message', (data) => {
-    if (data.error) {
-      emmiter.emit('error', data.error)
-      emmiter.emit('end', {
-        error: data.error,
-      })
-      child.kill()
-      return emmiter
-    }
-
-    emmiter.emit('read', data.data)
-    child.kill()
-    emmiter.emit('end', {
-      path: data.path,
-      content: data.data,
-      operation: 'read',
-    })
+  childRead.on('message', (data) => {
+    // if (data.error) {
+    //   emmiter.emit('error', data.error)
+    //   emmiter.emit('end', {
+    //     error: data.error,
+    //   })
+    // } else {
+      emmiter.emit('read', data.data)
+      // childRead.kill()
+      // emmiter.emit('end', {
+      //   path: data.path,
+      //   content: data.data,
+      //   operation: 'read',
+      // })
+    // }
   })
 
   return emmiter
@@ -35,24 +36,23 @@ exports.read = function _read(filePath) {
 exports.write = function _write(filePath, writeData) {
   const emmiter = new events.EventEmitter
 
-  let child = fork(path.resolve(__dirname, 'fork-write.js'))
-  child.send({
+  childWrite.send({
     path: filePath,
     msg: writeData,
   })
 
-  child.on('message', (data) => {
+  childWrite.on('message', (data) => {
     if (data.error) {
       emmiter.emit('error', data.error)
       emmiter.emit('end', {
         error: data.error,
       })
-      child.kill()
+      // childWrite.kill()
       return emmiter
     }
 
     emmiter.emit('write', data.data)
-    child.kill()
+    // childWrite.kill()
     emmiter.emit('end', {
       path: data.path,
       content: data.data,

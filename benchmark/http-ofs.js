@@ -4,7 +4,7 @@ const main = require('./src/main')
 
 const requestHandler = (request, response) => {
   console.log('requested')
-  main.read('./test/fixtures/2mb.txt').on('end', (data) => {
+  main.read('./test/fixtures/empty-file').on('end', (data) => {
     response.end(data.content)
   })
 }

@@ -1,10 +1,10 @@
 const main = require('./src/main')
 
-// const stream = main.read('./test/fixtures/simple-text')
+const stream = main.read('./test/fixtures/simple-text')
 
-// stream.on('read', (chunk) => {
-//   console.log(1, chunk)
-// })
+stream.on('read', (chunk) => {
+  console.log(1, chunk)
+})
 
 // stream.on('end', (result) => {
 //   console.log(1, result) // {path: './my-file.js', content: 'abc', operation: 'read'}

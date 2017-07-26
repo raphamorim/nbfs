@@ -30,6 +30,7 @@
   },
   "homepage": "https://github.com/raphamorim/ofs#readme",
   "devDependencies": {
+    "benchmark": "^2.1.4",
     "mocha": "^3.4.2"
   }
 }
