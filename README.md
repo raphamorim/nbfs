@@ -1,9 +1,9 @@
-<h1 align="center">OFS</h1>
+<h1 align="center">nbfs</h1>
 
-<p align="center">Optimized ~Nodejs~ File System</p>
+<p align="center">NonBlocking ~Nodejs~ File System</p>
 
 <p align="center">
-  <img src="https://api.travis-ci.org/raphamorim/ofs.svg?branch=master"/>
+  <img src="https://api.travis-ci.org/raphamorim/nbfs.svg?branch=master"/>
   <img src="https://ci.appveyor.com/api/projects/status/aaxmlgja7ytam84x/branch/master?svg=true"/>
   <img src="https://img.shields.io/npm/v/npm.svg"/>
 </p>
@@ -24,7 +24,7 @@ If your NodeJS Application has 100% cpu-usage and is taking a long time to compl
 
 <p align="center"><br><img alt="Distributed" src="assets/distributed.png"/><br></p>
 
-ofs creates and manage multiples processes which communicate between themself. This approach helps a lot for a non-blocking nodejs architechure.
+nbfs creates and manage multiples processes which communicate between themself. This approach helps a lot for a non-blocking nodejs architechure.
 
 Even if you use FS native stream API or based on async ways to this job, will always run on the nodejs main thread (in idle status or not).
 
@@ -32,10 +32,10 @@ Even if you use FS native stream API or based on async ways to this job, will al
 
 # Install
 
-For install ofs, just run in your terminal:
+For install nbfs, just run in your terminal:
 
 ```bash
-npm i ofs -S
+npm i nbfs -S
 ```
 
 # Streams
@@ -43,7 +43,7 @@ npm i ofs -S
 ## read
 
 ```js
-const { read } = require('ofs')
+const { read } = require('nbfs')
 const stream = read('./my-file.js') // absolute path
 
 stream.on('read', (content) => {
@@ -62,7 +62,7 @@ stream.on('error', (error) => {
 ## write
 
 ```js
-const { write } = require('ofs')
+const { write } = require('nbfs')
 const stream = write('./my-file.js', 'hello-world') // absolute path
 
 stream.on('write', (content) => {
@@ -76,6 +76,15 @@ stream.on('end', (result) => {
 stream.on('error', (error) => {
   console.log(error)
 })
+```
+
+## Benchmark
+
+```sh
+fs.readFile x 10,738 ops/sec ±2.46% (77 runs sampled)
+nbfs.read x 7,701 ops/sec ±2.74% (75 runs sampled)
+fs.readFileSync x 49,473 ops/sec ±1.75% (42 runs sampled)
+exec cat x 148 ops/sec ±1.57% (43 runs sampled)
 ```
 
 ## list
