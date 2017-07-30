@@ -1,17 +1,17 @@
 {
-  "name": "ofs",
-  "version": "0.1.0",
-  "description": "Optimized Nodejs File System",
+  "name": "nbfs",
+  "version": "0.2.0",
+  "description": "NonBlocking Nodejs File System",
   "main": "index.js",
   "scripts": {
     "test": "mocha --require assert --recursive --growl"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/raphamorim/ofs.git"
+    "url": "git+https://github.com/raphamorim/nbfs.git"
   },
   "keywords": [
-    "ofs",
+    "nbfs",
     "javascript",
     "nodejs",
     "fs",

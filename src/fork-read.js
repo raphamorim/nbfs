@@ -1,39 +1,19 @@
 const path = require('path')
 const fs = require('fs')
-// tron = require(path.resolve(__dirname, 'tron'))
 
-process.on("message", function(o) {
-  const stream = fs.createReadStream(o.msg)
-
-  stream.setEncoding('utf-8')
-  stream.on('data', (chunk) => {
+process.on('message', function(o) {
+  if (!fs.existsSync(o.msg))
     process.send({
-      data: chunk,
+      error: {
+        code: 'ENOENT',
+        syscall: 'open',
+        message: `ENOENT: no such file or directory, open ${o.msg}`,
+      }
+    })
+  else {
+    process.send({
+      data: fs.readFileSync(o.msg).toString(),
       path: o.msg,
     })
-  })
-
-  stream.on('end', function() {
-    // process.send({
-    //   data: file,
-    //   path: o.msg,
-    // })
-    stream.close()
-  })
-
-  stream.on('error', function(err) {
-    process.send({
-      error: err
-    })
-    stream.close()
-  })
-
-  // process.exit()
-  // }).catch((err) => {
-
-  // })
-})
-
-process.on("exit", function(o) {
-  process.exit()
+  }
 })

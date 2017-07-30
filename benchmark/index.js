@@ -1,7 +1,7 @@
 const Benchmark = require('benchmark')
 const suite = new Benchmark.Suite
 
-const ofs = require('../src/main')
+const nbfs = require('../src/main')
 const fs = require('fs')
 const { execSync } = require('child_process')
 
@@ -12,27 +12,26 @@ suite
   defer: true,
   fn: function(deferred) {
     fs.readFile(filePath, function read(err, data) {
-      // console.log(data.toString())
       if (data.toString())
         deferred.resolve()
     })
   }
 })
-.add('ofs.read', {
+.add('nbfs.read', {
   defer: true,
   fn: function(deferred) {
-    ofs
+    nbfs
       .read(filePath)
       .on('read', (data) => deferred.resolve())
   }
 })
-// .add('fs.readFileSync', {
-//   defer: true,
-//   fn: function(deferred) {
-//     const data = fs.readFileSync(filePath, 'utf-8')
-//     deferred.resolve()
-//   }
-// })
+.add('fs.readFileSync', {
+  defer: true,
+  fn: function(deferred) {
+    const data = fs.readFileSync(filePath, 'utf-8')
+    deferred.resolve()
+  }
+})
 .add('exec cat', {
   defer: true,
   fn: function(deferred) {

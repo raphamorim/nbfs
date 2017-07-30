@@ -1,33 +1,65 @@
 const events = require('events')
 const path = require('path')
-const fork = require('child_process').fork
+const { fork, spawn } = require('child_process')
 
-let childRead = fork('./src/fork-read.js')
-  // childWrite = fork(path.resolve(__dirname, 'fork-write.js'))
+let children = [
+  {
+    busy: false,
+    operation: 'read',
+    fork: fork('./src/fork-read.js')
+  },
+  {
+    busy: false,
+    operation: 'write',
+    fork: fork('./src/fork-write.js')
+  }
+]
+
+function cluster(operation) {
+  const available = children.filter((item) =>
+    (item.busy === false && item.operation === operation))
+
+  if (process.env['DEBUG']) {
+    console.log('available forks: ', available.length)
+    console.log('all children: ', children.length)
+  }
+
+  if (available.length)
+    return available[0]
+  else {
+    children.push({
+      busy: false,
+      operation: operation,
+      fork: fork(`./src/fork-${operation}.js`)
+    })
+    return cluster(operation)
+  }
+}
 
 exports.read = function _read(filePath) {
-  let file = ''
   const emmiter = new events.EventEmitter
+  const child = cluster('read')
 
-  childRead.send({
+  child.busy = true
+
+  child.fork.send({
     msg: filePath,
   })
 
-  childRead.on('message', (data) => {
-    // if (data.error) {
-    //   emmiter.emit('error', data.error)
-    //   emmiter.emit('end', {
-    //     error: data.error,
-    //   })
-    // } else {
+  child.fork.once('message', (data) => {
+    child.busy = false
+
+    if (data.error) {
+      emmiter.emit('error', data.error)
+      emmiter.emit('end', data)
+    } else {
       emmiter.emit('read', data.data)
-      // childRead.kill()
-      // emmiter.emit('end', {
-      //   path: data.path,
-      //   content: data.data,
-      //   operation: 'read',
-      // })
-    // }
+      emmiter.emit('end', {
+        path: data.path,
+        content: data.data,
+        operation: 'read',
+      })
+    }
   })
 
   return emmiter
@@ -35,24 +67,19 @@ exports.read = function _read(filePath) {
 
 exports.write = function _write(filePath, writeData) {
   const emmiter = new events.EventEmitter
+  const child = cluster('write')
 
-  childWrite.send({
+  child.busy = true
+
+  child.fork.send({
     path: filePath,
     msg: writeData,
   })
 
-  childWrite.on('message', (data) => {
-    if (data.error) {
-      emmiter.emit('error', data.error)
-      emmiter.emit('end', {
-        error: data.error,
-      })
-      // childWrite.kill()
-      return emmiter
-    }
+  child.fork.once('message', (data) => {
+    child.busy = false
 
     emmiter.emit('write', data.data)
-    // childWrite.kill()
     emmiter.emit('end', {
       path: data.path,
       content: data.data,
@@ -62,3 +89,19 @@ exports.write = function _write(filePath, writeData) {
 
   return emmiter
 }
+
+function killChildren(options, err) {
+  children.forEach(function(child, idx, array) {
+    child.fork.kill()
+
+    // if (idx === array.length - 1) {
+    //   if (options.cleanup) console.log('clean')
+    //   if (err) console.log(err.stack)
+    //   if (options.exit) process.exit()
+    // }
+  })
+}
+
+process.on('exit', killChildren.bind(null, {cleanup:true}))
+process.on('SIGINT', killChildren.bind(null, {exit:true}))
+// process.on('uncaughtException', killChildren.bind(null, {exit:true}))
